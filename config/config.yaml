@@ -1,0 +1,82 @@
+analysis_model:
+  provider: "openai"
+  api_key: "${ANALYSIS_API_KEY}"
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  model: "qwen-plus"
+  timeout: 5
+  max_retries: 2
+
+search_engines:
+  - name: "google"
+    enabled: false
+    priority: 5
+    config:
+      api_key: "${GOOGLE_API_KEY}"
+      search_engine_id: "${GOOGLE_CX_ID}"
+      endpoint: "https://www.googleapis.com/customsearch/v1"
+      max_results: 5
+
+  - name: "serper"
+    enabled: false
+    priority: 4
+    config:
+      api_key: "${SERPER_API_KEY}"
+      endpoint: "https://google.serper.dev/search"
+      max_results: 5
+
+  - name: "bing"
+    enabled: false
+    priority: 3
+    config:
+      api_key: "${BING_API_KEY}"
+      endpoint: "https://api.bing.microsoft.com/v7.0/search"
+      max_results: 5
+
+  - name: "baidu"
+    enabled: false
+    priority: 2
+    config:
+      api_key: "${BAIDU_API_KEY}"
+      secret: "${BAIDU_SECRET}"
+      max_results: 5
+
+  - name: "searxng"
+    enabled: true
+    priority: 1
+    config:
+      endpoint: "http://127.0.0.1:12080/search"
+      max_results: 5
+
+server:
+  host: "0.0.0.0"
+  port: 18080
+  workers: 1
+  request_timeout: 120
+
+logging:
+  level: "INFO"
+  format: "json"
+  output: "stdout"
+
+redis:
+  enabled: "${REDIS_ENABLED:-false}"
+  host: "${REDIS_HOST:-localhost}"
+  port: "${REDIS_PORT:-6379}"
+  password: "${REDIS_PASSWORD}"
+  db: "${REDIS_DB:-0}"
+  max_connections: "${REDIS_MAX_CONNECTIONS:-50}"
+  socket_timeout: 5
+  socket_connect_timeout: 5
+  retry_on_timeout: true
+  health_check_interval: 30
+
+cache:
+  enabled: true
+  ttl: 3600
+  max_size: 1000
+  backend: "memory"
+
+search_strategy:
+  min_confidence_threshold: 0.6
+  max_search_queries: 3
+  result_per_query: 5

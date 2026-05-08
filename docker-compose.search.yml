@@ -1,0 +1,13 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    ports:
+      - "18080:8080"
+    volumes:
+      - ./searxng:/etc/searxng:Z
+    ulimits:
+      nofile:
+        soft: 10000
+        hard: 65535
